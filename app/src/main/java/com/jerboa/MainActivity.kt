@@ -66,6 +66,7 @@ import com.jerboa.ui.components.post.PostActivity
 import com.jerboa.ui.components.post.create.CreatePostActivity
 import com.jerboa.ui.components.post.edit.PostEditActivity
 import com.jerboa.ui.components.privatemessage.PrivateMessageReplyActivity
+import com.jerboa.ui.components.register.RegisterActivity
 import com.jerboa.ui.components.report.comment.CreateCommentReportActivity
 import com.jerboa.ui.components.report.post.CreatePostReportActivity
 import com.jerboa.ui.components.settings.SettingsActivity
@@ -157,6 +158,19 @@ class MainActivity : AppCompatActivity() {
                     popEnterTransition = { slideInHorizontally { -it } },
                     popExitTransition = { slideOutHorizontally { it } },
                 ) {
+
+                    composable(
+                        route = Route.REGISTER,
+                        deepLinks = DEFAULT_LEMMY_INSTANCES.map { instance ->
+                            navDeepLink { uriPattern = "$instance/register" }
+                        },
+                    ) {
+                        RegisterActivity(
+                            navController = navController,
+                            accountViewModel = accountViewModel,
+                            siteViewModel = siteViewModel,
+                        )
+                    }
                     composable(
                         route = Route.LOGIN,
                         deepLinks = DEFAULT_LEMMY_INSTANCES.map { instance ->

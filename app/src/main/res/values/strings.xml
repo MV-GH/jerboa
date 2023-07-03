@@ -330,4 +330,9 @@
     <string name="dialogs_top_nine_month">Top Nine Months</string>
     <string name="post_listing_view_source">View Source</string>
     <string name="post_listing_view_original">View Original</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="register_show_nsfw">Show NSFW content</string>
+    <string name="home_create_account">Create account</string>
 </resources>

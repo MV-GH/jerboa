@@ -26,9 +26,12 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.LocationCity
 import androidx.compose.material.icons.outlined.Login
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.PersonAdd
+import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
@@ -62,6 +65,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -90,6 +94,7 @@ import com.jerboa.ui.components.common.SortOptionsDialog
 import com.jerboa.ui.components.common.SortTopOptionsDialog
 import com.jerboa.ui.components.common.simpleVerticalScrollbar
 import com.jerboa.ui.components.common.toLogin
+import com.jerboa.ui.components.common.toRegister
 import com.jerboa.ui.components.common.toSiteSideBar
 import com.jerboa.ui.components.community.CommunityLinkLarger
 import com.jerboa.ui.components.person.PersonName
@@ -100,6 +105,7 @@ import com.jerboa.ui.theme.XL_PADDING
 import com.jerboa.ui.theme.muted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 fun Drawer(
@@ -348,25 +354,40 @@ fun DrawerAddAccountMode(
     accountsWithoutCurrent?.remove(currentAccount)
 
     Column {
-        IconAndTextDrawerItem(
-            text = stringResource(R.string.home_add_account),
-            icon = Icons.Outlined.Add,
-            onClick = { navController.toLogin() },
-        )
-        accountsWithoutCurrent?.forEach {
-            IconAndTextDrawerItem(
-                text = stringResource(R.string.home_switch_to, it.instance, it.name),
-                icon = Icons.Outlined.Login,
-                onClick = { onSwitchAccountClick(it) },
-            )
-        }
         currentAccount?.also {
             IconAndTextDrawerItem(
-                text = stringResource(R.string.home_sign_out),
-                icon = Icons.Outlined.Close,
+                // TODO: properly do this
+                text = stringResource(R.string.home_sign_out).lowercase(). replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(
+                        Locale.getDefault()
+                    ) else it.toString()
+                },
+                icon = Icons.Outlined.Logout,
                 onClick = onSignOutClick,
             )
         }
+        accountsWithoutCurrent?.forEach {
+            IconAndTextDrawerItem(
+                text = stringResource(R.string.home_switch_to, it.instance, it.name),
+                icon = Icons.Outlined.Person,
+                onClick = { onSwitchAccountClick(it) },
+            )
+        }
+        IconAndTextDrawerItem(
+            // TODO: properly do this
+            text = stringResource(R.string.home_add_account).lowercase(). replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            },
+            icon = Icons.Outlined.PersonAdd,
+            onClick = { navController.toLogin() },
+        )
+        IconAndTextDrawerItem(
+            text = stringResource(R.string.home_create_account),
+            icon = Icons.Outlined.Add,
+            onClick = navController::toRegister,
+        )
     }
 }
 

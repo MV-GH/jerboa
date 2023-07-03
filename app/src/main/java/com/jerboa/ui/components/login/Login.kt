@@ -22,6 +22,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +38,7 @@ import com.jerboa.R
 import com.jerboa.datatypes.types.Login
 import com.jerboa.db.Account
 import com.jerboa.onAutofill
+import com.jerboa.onAutofill2
 
 @Composable
 fun MyTextField(
@@ -163,10 +166,15 @@ fun LoginForm(
             }
         }
 
+        val t = LocalAutofillTree.current
+
+        val autofill = LocalAutofill.current
+
+
         MyTextField(
             modifier = Modifier
                 .background(if (wasAutofilled) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
-                .onAutofill(AutofillType.Username, AutofillType.EmailAddress) {
+                .onAutofill2(t, autofill, AutofillType.Username, AutofillType.EmailAddress) {
                     username = it
                     wasAutofilled = true
                 },

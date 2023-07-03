@@ -9,6 +9,7 @@ object Route {
         const val COMMUNITY = "graph_community"
     }
 
+    const val REGISTER = "register"
     const val LOGIN = "login"
     const val INBOX = "inbox"
     const val HOME = "home"

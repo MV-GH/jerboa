@@ -24,12 +24,15 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TabPosition
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.Autofill
 import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillTree
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
@@ -952,6 +955,31 @@ fun Modifier.onAutofill(vararg autofillType: AutofillType, onFill: (String) -> U
     val autofill = LocalAutofill.current
 
     this
+        .onGloballyPositioned {
+            autofillNode.boundingBox = it.boundsInWindow()
+        }
+        .onFocusChanged { focusState ->
+            autofill?.run {
+                if (focusState.isFocused) {
+                    requestAutofillForNode(autofillNode)
+                } else {
+                    cancelAutofillForNode(autofillNode)
+                }
+            }
+        }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun Modifier.onAutofill2(tree: AutofillTree, autofill: Autofill?, vararg autofillType: AutofillType, onFill: (String) -> Unit): Modifier {
+
+    val autofillNode = AutofillNode(
+        autofillTypes = autofillType.toList(),
+        onFill = onFill,
+    )
+    tree += autofillNode
+
+
+    return this
         .onGloballyPositioned {
             autofillNode.boundingBox = it.boundsInWindow()
         }
