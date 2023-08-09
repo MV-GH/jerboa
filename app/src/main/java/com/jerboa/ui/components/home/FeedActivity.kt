@@ -69,6 +69,8 @@ fun FeedActivity(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val ctx = LocalContext.current
     val account = getCurrentAccount(accountViewModel)
+    var isCommunityBlocked = false
+
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -167,6 +169,7 @@ fun MainPostListingsContent(
                 )
             }
         },
+
         onBlockCommunityClick = {
             account?.also { acct ->
                 homeViewModel.blockCommunity(
@@ -174,7 +177,11 @@ fun MainPostListingsContent(
                     account = acct,
                     ctx = ctx,
                 )
-            }
+                isCommunityBlocked = true
+            }else {
+            communityViewModel.unblockCommunity(account = acct, ctx = ctx)
+            isCommunityBlocked = false
+        }
         },
         onBlockCreatorClick = {
             account?.also { acct ->

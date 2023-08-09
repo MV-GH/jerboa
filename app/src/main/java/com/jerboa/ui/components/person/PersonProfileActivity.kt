@@ -72,6 +72,7 @@ fun PersonProfileActivity(
     val account = getCurrentAccount(accountViewModel)
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    var isCommunityBlocked = false
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -330,7 +331,11 @@ fun UserTabs(
                                     account = acct,
                                     ctx = ctx,
                                 )
-                            }
+                                isCommunityBlocked = true
+                            }else {
+                            communityViewModel.unblockCommunity(account = acct, ctx = ctx)
+                            isCommunityBlocked = false
+                        }
                         },
                         onBlockCreatorClick = {
                             account?.also { acct ->

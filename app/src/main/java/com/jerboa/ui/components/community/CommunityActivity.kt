@@ -60,6 +60,7 @@ fun CommunityActivity(
     val ctx = LocalContext.current
     val account = getCurrentAccount(accountViewModel)
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    var isCommunityBlocked = false // A flag to track the block status
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -173,13 +174,20 @@ fun CommunityActivity(
                 onPersonClick = { personId ->
                     navController.navigate(route = "profile/$personId")
                 },
+
+
                 onBlockCommunityClick = {
                     account?.also { acct ->
                         communityViewModel.blockCommunity(
                             account = acct,
                             ctx = ctx,
-                        )
-                    }
+                        )isCommunityBlocked = true
+                    } else {
+                    // Undo the block action here
+                    communityViewModel.unblockCommunity(account = acct, ctx = ctx)
+                    isCommunityBlocked = false
+                }
+
                 },
                 onBlockCreatorClick = {
                     account?.also { acct ->
