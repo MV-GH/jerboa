@@ -70,6 +70,7 @@ fun pink(): Pair<ColorScheme, ColorScheme> {
     val md_theme_dark_surfaceTint = Color(0xFFFFB0CB)
     val md_theme_dark_outlineVariant = Color(0xFF514347)
     val md_theme_dark_scrim = Color(0xFF000000)
+    val toolbar.setBackgroundColor(0xFFFFB0CB)
 
 //    val seed = Color(0xFFFF78AE)
 
